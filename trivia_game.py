@@ -54,9 +54,17 @@ class Player:
         self.name = name 
         self.score = score
         self.correct_answers = correct_answers
-        self.incorrect_answers = incorrect_answers  
+        self.incorrect_answers = incorrect_answers 
+
+class Trivia:
+
+    @staticmethod
+    def ask_question():
+        return choice(Question.question_library)
+
 
 print('Player 1 enter your name')
 name = input()
 player_1 = Player(name)
 print(player_1.name)
+
