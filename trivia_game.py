@@ -19,13 +19,12 @@ import requests
 import json
 import html
 from random import choice
-
-response_API_trivia_questions = requests.get('https://opentdb.com/api.php?amount=50')
+# https://opentdb.com/api.php?amount=10&category=12&difficulty=easy
+# https://opentdb.com/api.php?amount=10
+response_API_trivia_questions = requests.get('https://opentdb.com/api.php?amount=20&category=12&difficulty=easy')
 # print(response_API.status_code)
 
 data = response_API_trivia_questions.text
-
-# print(html.unescape(json.loads(data)['results'][0]['question']))
 
 class Question:
     question_library = []
@@ -50,21 +49,76 @@ class Question:
 
 class Player:
 
-    def __init__(self, name, score = 0, correct_answers = 0, incorrect_answers = 0):
+    def __init__(self, name, score = 0, incorrect_answers = 0):
         self.name = name 
         self.score = score
-        self.correct_answers = correct_answers
-        self.incorrect_answers = incorrect_answers 
+        self.incorrect_answers = incorrect_answers
+ 
 
 class Trivia:
 
     @staticmethod
-    def ask_question():
-        return choice(Question.question_library)
+    def play_game():
+        Question.create_questions(data)
+        num_of_questions = len(Question.question_library)
+
+        print('Player 1 enter your name\n')
+        name = input()
+        player_1 = Player(name)
+        print(f'Welcome {player_1.name}\n')
+
+        print('Player 2 enter your name\n')
+        name = input()
+        player_2 = Player(name)
+        print(f'Welcome {player_2.name}\n')
+
+        user = ''
+        while Question.question_library:
+            if user == player_1:
+                user = player_2  
+            else: 
+                user = player_1
+            
+            print('Question #', num_of_questions)
+            num_of_questions -= 1
+            Trivia.ask_question(user)
+        
+        if player_1.score > player_2.score:
+            winner = player_1
+        else:
+            winner = player_2
+
+        print('You won', winner.name)
+        print('with a score of', winner.score)
 
 
-print('Player 1 enter your name')
-name = input()
-player_1 = Player(name)
-print(player_1.name)
+    def ask_question(user):
+        game_question = choice(Question.question_library)
+        Question.question_library.remove(game_question)
 
+        print(user.name)
+        print(game_question.question)
+
+        answer = game_question.correct_answer
+        wrong_answers = game_question.incorrect_answers
+        choice_keys = ['D', 'C', 'B', 'A']
+        choice_dict = {}
+        answers = [*wrong_answers, answer]
+        
+        while answers:
+            ans = choice(answers)
+            choice_letter = choice_keys.pop()
+            print(f'{choice_letter}. {html.unescape(ans)}')
+            choice_dict[choice_letter] = ans
+            answers.remove(ans)
+
+        user_selection = input('Your guess:  ')
+        if choice_dict[user_selection] == answer:
+            print('Correct\n')
+            user.score += 1
+        else:
+            print('Incorrect, the answer is:', answer)
+            user.incorrect_answers += 1
+            print(' ')
+
+Trivia.play_game()
