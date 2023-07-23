@@ -8,12 +8,7 @@
 # player has a tally of correct and incorrect answers
 # do we create a object for the question?
 # does the question class take care of the questions?
-# {'category': 'Politics',
-#   'type': 'multiple',
-#   'difficulty': 'easy',
-#   'question': 'Whose 2016 presidential campaign slogan was &quot;Make America Great Again&quot;?',
-#   'correct_answer': 'Donald Trump',
-#   'incorrect_answers': ['Ted Cruz', 'Marco Rubio', 'Bernie Sanders']},
+
 
 import requests
 import json
@@ -138,6 +133,8 @@ class Trivia:
 
         print('\n')
         user_selection = input('Your guess:  ').lower()
+        while user_selection not in choice_dict:
+            user_selection = input('Select from available choices:  ').lower()
 
         if choice_dict[user_selection] == answer:
             print('Correct\n')
