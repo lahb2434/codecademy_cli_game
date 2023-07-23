@@ -18,7 +18,7 @@ from time import sleep
 from random import choice
 # https://opentdb.com/api.php?amount=10&category=12&difficulty=easy
 # https://opentdb.com/api.php?amount=10
-response_API_trivia_questions = requests.get('https://opentdb.com/api.php?amount=1&category=12&difficulty=hard')
+response_API_trivia_questions = requests.get('https://opentdb.com/api.php?amount=20&category=12&difficulty=hard')
 # print(response_API.status_code)
 
 data = response_API_trivia_questions.text
