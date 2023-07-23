@@ -23,7 +23,7 @@ from time import sleep
 from random import choice
 # https://opentdb.com/api.php?amount=10&category=12&difficulty=easy
 # https://opentdb.com/api.php?amount=10
-response_API_trivia_questions = requests.get('https://opentdb.com/api.php?amount=10')
+response_API_trivia_questions = requests.get('https://opentdb.com/api.php?amount=1&category=12&difficulty=hard')
 # print(response_API.status_code)
 
 data = response_API_trivia_questions.text
@@ -94,13 +94,24 @@ class Trivia:
             print('Question #', num_of_questions)
             num_of_questions -= 1
             Trivia.ask_question(user)
-            
+
         if player_1.score == player_2.score:
             print(f'Tied! with a score of {player_2.score}')
         elif player_1.score > player_2.score:
             player_1.winner(player_2)
         else:
             player_2.winner(player_1)
+
+        
+        while True:
+            print('Play Again? Y/N')
+            play_again = input().lower()
+            if play_again == 'y':
+                Trivia.play_game()
+                break
+            elif play_again == 'n':
+                exit()
+
 
             
 
@@ -135,7 +146,7 @@ class Trivia:
             print('Incorrect, the answer is:', answer)
             user.incorrect_answers += 1
             print(' ')
-        sleep(0.5)
+        sleep(2)
         os.system('clear')
 
 Trivia.play_game()
